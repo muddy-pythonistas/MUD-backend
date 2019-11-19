@@ -20,13 +20,13 @@ class World:
             x = room_count % size_x
             y = room_count // size_x
             if y % 2 == 1:
-                room = Room(id=room_count, title='Some room',
+                room = Room(id=room_count + 1, title='Some room',
                             description = 'Just some room', x_coord =size_x - 1
                                                                   - x,
                             y_coord=y)
                 self.grid[y][size_x - 1 - x] = room
             else:
-                room = Room(id=room_count, title='Some room',
+                room = Room(id=room_count + 1, title='Some room',
                             description='Just some room', x_coord = x,
                             y_coord =y)
                 self.grid[y][x] = room
@@ -59,9 +59,9 @@ class World:
             room_count += 1
 
 w = World()
-num_rooms = 21
-width = 7
-height = 3
+num_rooms = 100
+width = 10
+height = 10
 w.generate_rooms(width, height, num_rooms)
 
 players=Player.objects.all()
