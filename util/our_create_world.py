@@ -21,11 +21,15 @@ class World:
             x = room_count % size_x
             y = room_count // size_x
             if y % 2 == 1:
-                room = Room(room_count, 'Some room', 'Just some room', size_x - 1 - x,
-                            y)
+                room = Room(id=room_count, title='Some room',
+                            description = 'Just some room', x_coord =size_x - 1
+                                                                  - x,
+                            y_coord=y)
                 self.grid[y][size_x - 1 - x] = room
             else:
-                room = Room(room_count, 'Some room', 'Just some room', x, y)
+                room = Room(id=room_count, title='Some room',
+                            descirption='Just some room', x_coord = x,
+                            y_coord =y)
                 self.grid[y][x] = room
             room_count += 1
         room_count = 0
