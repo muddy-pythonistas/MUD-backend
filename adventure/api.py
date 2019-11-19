@@ -65,3 +65,8 @@ def move(request):
 def say(request):
     # IMPLEMENT
     return JsonResponse({'error':"Not yet implemented"}, safe=True, status=500)
+
+@api_view(["GET"])
+def get_map(request):
+    rooms = Room.objects.all().values()
+    return JsonResponse({"rooms": list(rooms)})
