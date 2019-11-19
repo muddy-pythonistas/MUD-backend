@@ -22,6 +22,7 @@ class Room(models.Model):
         setattr(self, f"{direction}_to", connecting_room)
         setattr(connecting_room, f"{reverse_dir}_to", self)
         self.save()
+        connecting_room.save()
     def playerNames(self, currentPlayerID):
         return [p.user.username for p in Player.objects.filter(currentRoom=self.id) if p.id != int(currentPlayerID)]
     def playerUUIDs(self, currentPlayerID):
