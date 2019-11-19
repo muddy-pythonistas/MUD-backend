@@ -66,5 +66,5 @@ w.generate_rooms(width, height, num_rooms)
 
 players=Player.objects.all()
 for p in players:
-    p.currentRoom=w.grid[0][0]
+    p.currentRoom=w.grid[0][0].id
     p.save()
