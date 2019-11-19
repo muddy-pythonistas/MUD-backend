@@ -55,7 +55,7 @@ class World:
         for i in range( len(self.grid) ):
             self.grid[i] = [None] * size_x
 
-        # Filling grid with rooms
+        # Filling grid with rooms (in zig-zag pattern)
         room_count = 0
         while room_count < num_rooms:
             x = room_count % size_x
@@ -76,11 +76,16 @@ class World:
             x = room_count % size_x
             y = room_count // size_x
             if x < size_x - 1:
-                curr_room = self.grid[y][x]
-                next_room = self.grid[y][x + 1]
-                if next_room is None:
-                    break
-                curr_room.connect_rooms(next_room, 'e') 
+                if y % 2 == 1:
+                    curr_room =  self.grid[y][size_x - 1 - x]
+                    next_room = self.grid[y][size_x - 1 - x - 1]
+                    if next_room is not None:
+                        curr_room.connect_rooms(next_room, 'w') 
+                else: 
+                    curr_room = self.grid[y][x]
+                    next_room = self.grid[y][x + 1]
+                    if next_room is not None:
+                        curr_room.connect_rooms(next_room, 'e') 
             room_count += 1
 
         #Making north + south connection between adjacent rooms
@@ -91,9 +96,8 @@ class World:
             if y < size_y - 1:
                 curr_room = self.grid[y][x]
                 next_room = self.grid[y + 1][x]
-                if next_room is None:
-                    break
-                curr_room.connect_rooms(next_room, 's') 
+                if next_room is not None:
+                    curr_room.connect_rooms(next_room, 's') 
             room_count += 1
 
     def print_rooms(self):
@@ -153,9 +157,9 @@ class World:
 
 
 w = World()
-num_rooms = 100
-width = 10
-height = 10
+num_rooms = 21
+width = 7
+height = 3
 w.generate_rooms(width, height, num_rooms)
 w.print_rooms()
 
