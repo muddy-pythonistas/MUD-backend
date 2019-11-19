@@ -19,8 +19,8 @@ class Room(models.Model):
     def connect_rooms(self, connecting_room, direction):
         reverse_dirs = {"n": "s", "s": "n", "e": "w", "w": "e"}
         reverse_dir = reverse_dirs[direction]
-        setattr(self, f"{direction}_to", connecting_room)
-        setattr(connecting_room, f"{reverse_dir}_to", self)
+        setattr(self, f"{direction}_to", connecting_room.id)
+        setattr(connecting_room, f"{reverse_dir}_to", self.id)
         self.save()
         connecting_room.save()
     def playerNames(self, currentPlayerID):
