@@ -45,6 +45,8 @@ class World:
         '''
         Fill up the grid, bottom to top, in a zig-zag pattern
         '''
+        if num_rooms > size_x * size_y:
+            return 'Grid size is not big enough to accommodate all rooms' 
 
         # Initialize the grid
         self.grid = [None] * size_y
@@ -53,13 +55,19 @@ class World:
         for i in range( len(self.grid) ):
             self.grid[i] = [None] * size_x
 
-        # Filling grid with rooms
+        # Filling grid with rooms (in zig-zag pattern)
         room_count = 0
         while room_count < num_rooms:
             x = room_count % size_x
             y = room_count // size_x
-            room = Room(room_count, 'Some room', 'Just some room', x, y)
-            self.grid[y][x] = room
+
+            if y % 2 == 1:
+                room = Room(room_count, 'Some room', 'Just some room', size_x - 1 - x, y)
+                self.grid[y][size_x - 1 - x] = room
+            else:
+                room = Room(room_count, 'Some room', 'Just some room', x, y)
+                self.grid[y][x] = room
+
             room_count += 1
 
         #Making east + west connection between adjacent rooms
@@ -67,21 +75,17 @@ class World:
         while room_count < num_rooms:
             x = room_count % size_x
             y = room_count // size_x
-            if x == 0:
-                curr_room = self.grid[y][x]
-                next_room = self.grid[y][x + 1]
-                curr_room.connect_rooms(next_room, 'e')
-            elif x == size_x - 1:
-                curr_room = self.grid[y][x]
-                prev_room = self.grid[y][x - 1] 
-                curr_room.connect_rooms(next_room, 'w')
-                curr_room.e_to = None
-            else: 
-                curr_room = self.grid[y][x]
-                prev_room = self.grid[y][x - 1] 
-                next_room = self.grid[y][x + 1]
-                curr_room.connect_rooms(next_room, 'e')
-                curr_room.connect_rooms(prev_room, 'w')
+            if x < size_x - 1:
+                if y % 2 == 1:
+                    curr_room =  self.grid[y][size_x - 1 - x]
+                    next_room = self.grid[y][size_x - 1 - x - 1]
+                    if next_room is not None:
+                        curr_room.connect_rooms(next_room, 'w') 
+                else: 
+                    curr_room = self.grid[y][x]
+                    next_room = self.grid[y][x + 1]
+                    if next_room is not None:
+                        curr_room.connect_rooms(next_room, 'e') 
             room_count += 1
 
         #Making north + south connection between adjacent rooms
@@ -89,20 +93,11 @@ class World:
         while room_count < num_rooms:
             x = room_count % size_x
             y = room_count // size_x
-            if y == 0:
+            if y < size_y - 1:
                 curr_room = self.grid[y][x]
                 next_room = self.grid[y + 1][x]
-                curr_room.connect_rooms(next_room, 's')
-            elif y == size_y - 1:
-                curr_room = self.grid[y][x]
-                prev_room = self.grid[y - 1][x]
-                curr_room.connect_rooms(prev_room, 'n')
-            else:
-                curr_room = self.grid[y][x]
-                prev_room = self.grid[y - 1][x] 
-                next_room = self.grid[y + 1][x]
-                curr_room.connect_rooms(next_room, 's')
-                curr_room.connect_rooms(prev_room, 'n')
+                if next_room is not None:
+                    curr_room.connect_rooms(next_room, 's') 
             room_count += 1
 
     def print_rooms(self):
@@ -162,9 +157,9 @@ class World:
 
 
 w = World()
-num_rooms = 25
-width = 5
-height = 5
+num_rooms = 21
+width = 7
+height = 3
 w.generate_rooms(width, height, num_rooms)
 w.print_rooms()
 
