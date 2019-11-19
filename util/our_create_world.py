@@ -7,7 +7,6 @@ class World:
         self.grid = None
         self.width = 0
         self.height = 0
-
     def generate_rooms(self, size_x, size_y, num_rooms):
         if num_rooms > size_x * size_y:
             return 'Grid size is not big enough to accommodate all rooms'
@@ -28,7 +27,7 @@ class World:
                 self.grid[y][size_x - 1 - x] = room
             else:
                 room = Room(id=room_count, title='Some room',
-                            descirption='Just some room', x_coord = x,
+                            description='Just some room', x_coord = x,
                             y_coord =y)
                 self.grid[y][x] = room
             room_count += 1
