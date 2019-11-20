@@ -1,4 +1,6 @@
 from adventure.models import Player, Room
+from room_descriptions import rooms
+import random
 
 Room.objects.all().delete()
 
@@ -19,17 +21,16 @@ class World:
         while room_count < num_rooms:
             x = room_count % size_x
             y = room_count // size_x
-            if y % 2 == 1:
-                room = Room(id=room_count + 1, title='Some room',
-                            description = 'Just some room', x_coord =size_x - 1
-                                                                  - x,
-                            y_coord=y)
-                self.grid[y][size_x - 1 - x] = room
+            num = random.randrange(101)    
+            x_coord = size_x - 1 - x if y % 2 == 1 else x
+            if (x_coord == 0 and y == 0) or num % 4 == 0:
+                room = rooms[1] 
+            elif num % 10 == 0:
+                room = rooms[2]
             else:
-                room = Room(id=room_count + 1, title='Some room',
-                            description='Just some room', x_coord = x,
-                            y_coord =y)
-                self.grid[y][x] = room
+                room = rooms[num // 5 + 2]
+            room = Room(id=room_count + 1, title=room['name'], description=room['description'], x_coord=x_coord, y_coord=y)
+            self.grid[y][x_coord] = room
             room_count += 1
         room_count = 0
         while room_count < num_rooms:
@@ -40,12 +41,14 @@ class World:
                     curr_room = self.grid[y][size_x - 1 - x]
                     next_room = self.grid[y][size_x - 1 - x - 1]
                     if next_room is not None:
-                        curr_room.connect_rooms(next_room, 'w')
+                        if curr_room.name != 'Empty' and next_room.name != 'Empty':
+                            curr_room.connect_rooms(next_room, 'w')
                 else:
                     curr_room = self.grid[y][x]
                     next_room = self.grid[y][x + 1]
                     if next_room is not None:
-                        curr_room.connect_rooms(next_room, 'e')
+                        if curr_room.name != 'Empty' and next_room.name != 'Empty':
+                            curr_room.connect_rooms(next_room, 'e')
             room_count += 1
         room_count = 0
         while room_count < num_rooms:
@@ -55,7 +58,8 @@ class World:
                 curr_room = self.grid[y][x]
                 next_room = self.grid[y + 1][x]
                 if next_room is not None:
-                    curr_room.connect_rooms(next_room, 's')
+                    if curr_room.name != 'Empty' and next_room.name != 'Empty':
+                        curr_room.connect_rooms(next_room, 's')
             room_count += 1
 
 w = World()
