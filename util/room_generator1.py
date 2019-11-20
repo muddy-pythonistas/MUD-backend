@@ -157,9 +157,9 @@ class World:
 
 
 w = World()
-num_rooms = 16
-width = 4
-height = 4
+num_rooms = 500
+width = 30
+height = 20
 w.generate_rooms(width, height, num_rooms)
 w.print_rooms()
 
