@@ -51,6 +51,8 @@ def move(request):
     if nextRoomID is not None and nextRoomID > 0:
         nextRoom = Room.objects.get(id=nextRoomID)
         player.currentRoom=nextRoomID
+        player.x_coord = nextRoom.x_coord
+        player.y_coord = nextRoom.y_coord
         player.save()
         players = nextRoom.playerNames(player_id)
         currentPlayerUUIDs = room.playerUUIDs(player_id)
