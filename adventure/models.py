@@ -32,6 +32,8 @@ class Room(models.Model):
 class Player(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     currentRoom = models.IntegerField(default=0)
+    x_coord = models.IntegerField(default=0)
+    y_coord = models.IntegerField(default=0)
     uuid = models.UUIDField(default=uuid.uuid4, unique=True)
     def initialize(self):
         if self.currentRoom == 0:
