@@ -101,16 +101,16 @@ class World:
                         curr_room.connect_rooms(next_room, 's')
             room_count += 1
         room_count = 0
+        use_sword = True
+        use_shield = True
+        use_key = True
+        use_door = True
         while room_count < num_rooms:
             x = room_count % size_x
             y = room_count // size_y
             curr_room = self.grid[y][x]
             num = random.randrange(625)
             add_item = False
-            use_sword = True
-            use_shield = True
-            use_key = True
-            use_door = True
             if not (x == 0 and y == 0) and curr_room.title != 'Empty':
                 conn = 0
                 if curr_room.n_to:
@@ -123,7 +123,7 @@ class World:
                     conn += 1
                 if conn == 1:
                     room = rooms[num % 5 + 18]
-                    addItem = True
+                    add_item = True
                 elif conn == 2:
                     if ((curr_room.n_to is not None and curr_room.s_to is not None) or (curr_room.w_to is not None and curr_room.e_to is not None)):
                         room = rooms[3]
@@ -136,7 +136,7 @@ class World:
                         room = rooms[num % 18 + 4]
                 curr_room.title = room['name']
                 curr_room.description = room['description']
-                if addItem:
+                if add_item:
                     if use_shield:
                         curr_room.item = Item.objects.filter(id = 4)[0]
                         use_shield = False
