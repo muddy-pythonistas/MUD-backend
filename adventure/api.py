@@ -26,7 +26,8 @@ def initialize(request):
     room = player.room()
     items = player.items.all().values()
     players = room.playerNames(player_id)
-    return JsonResponse({'uuid': uuid, 'items': list(items),
+    return JsonResponse({'uuid': uuid, 'items': list(items), "sprite": player.sprite, "char_class":
+        player.char_class,
                          'name':player.user.username, \
                                                  "x_coord":
                                  player.x_coord, "y_coord": player.y_coord,'title':room.title, 'description':room.description, 'curr_room': room.id, 'players':players}, safe=True)
