@@ -25,8 +25,8 @@ def initialize(request):
     uuid = player.uuid
     room = player.room()
     players = room.playerNames(player_id)
-    return JsonResponse({'uuid': uuid, 'name':player.user.username, "x_coord": player.x_coord, "curr_room": room, 
-                         "y_coord": player.y_coord,'title':room.title, 'description':room.description, 'players':players}, safe=True)
+    return JsonResponse({'uuid': uuid, 'name':player.user.username, "x_coord":
+                                 player.x_coord, "y_coord": player.y_coord,'title':room.title, 'description':room.description, 'curr_room': room.id, 'players':players}, safe=True)
 
 
 # @csrf_exempt
@@ -62,10 +62,9 @@ def move(request):
             pusher.trigger(f'p-channel-{p_uuid}', u'broadcast', {'message':f'{player.user.username} has walked {dirs[direction]}.'})
         for p_uuid in nextPlayerUUIDs:
             pusher.trigger(f'p-channel-{p_uuid}', u'broadcast', {'message':f'{player.user.username} has entered from the {reverse_dirs[direction]}.'})
-        return JsonResponse({'name':player.user.username,
+        return JsonResponse({'name':player.user.username, 'curr_room': nextRoom.id,
                              'title':nextRoom.title,
                              'description':nextRoom.description,
-                             "curr_room": nextRoom,
                              'players':players, 'error_msg':"", "x_coord":
                                  player.x_coord, "y_coord": player.y_coord},
                             safe=True)
