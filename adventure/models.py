@@ -19,7 +19,7 @@ class Room(models.Model):
     s_to = models.IntegerField(default=0)
     e_to = models.IntegerField(default=0)
     w_to = models.IntegerField(default=0)
-    item = models.ForeignKey(Item, on_delete=models.CASCADE, default=0)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, default=1)
 
     def connect_rooms(self, connecting_room, direction):
         reverse_dirs = {"n": "s", "s": "n", "e": "w", "w": "e"}
