@@ -89,5 +89,5 @@ def say(request):
 
 @api_view(["GET"])
 def get_map(request):
-    rooms = Room.objects.all().values()
+    rooms = Room.objects.all().values().order_by('id')
     return JsonResponse({"rooms": list(rooms)})
