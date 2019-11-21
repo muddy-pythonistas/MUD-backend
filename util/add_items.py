@@ -1,6 +1,9 @@
 from adventure.models import Item
 
+items = Item.objects.all().delete()
+
 items = {
+    "Empty": "Nothing",
     "Gold": "Gold greases palms, builds empires, and instigates murder.",
     "Sword": "The razor-sharp point makes this weapon ideal to pierce your "
              "enemies and turn them into a sieve.",
