@@ -68,34 +68,26 @@ class World:
             x = room_count % size_x
             y = room_count // size_x
             num = random.randrange(101)    
-            x_coord = size_x - 1 - x if y % 2 == 1 else x
-            if x_coord == 0 and y == 0:
+            if x == 0 and y == 0:
                 room = rooms[1] 
             elif num % 10 == 0:
                 room = rooms[2]
             else:
                 room = rooms[1]
-            room = Room(id=room_count + 1, title=room['name'], description=room['description'], x_coord=x_coord, y_coord=y)
+            room = Room(id=room_count + 1, title=room['name'], description=room['description'], x_coord=x, y_coord=y)
             room.save()
-            self.grid[y][x_coord] = room
+            self.grid[y][x] = room
             room_count += 1
         room_count = 0
         while room_count < num_rooms:
             x = room_count % size_x
             y = room_count // size_x
             if x < size_x - 1:
-                if y % 2 == 1:
-                    curr_room = self.grid[y][size_x - 1 - x]
-                    next_room = self.grid[y][size_x - 1 - x - 1]
-                    if next_room is not None:
-                        if curr_room.title != 'Empty' and next_room.title != 'Empty':
-                            curr_room.connect_rooms(next_room, 'w')
-                else:
-                    curr_room = self.grid[y][x]
-                    next_room = self.grid[y][x + 1]
-                    if next_room is not None:
-                        if curr_room.title != 'Empty' and next_room.title != 'Empty':
-                            curr_room.connect_rooms(next_room, 'e')
+                curr_room = self.grid[y][x]
+                next_room = self.grid[y][x + 1]
+                if next_room is not None:
+                    if curr_room.title != 'Empty' and next_room.title != 'Empty':
+                        curr_room.connect_rooms(next_room, 'e')
             room_count += 1
         room_count = 0
         while room_count < num_rooms:

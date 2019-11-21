@@ -63,15 +63,15 @@ class World:
             x = room_count % size_x
             y = room_count // size_x
             num = random.randrange(101)    
-            x_coord = size_x - 1 - x if y % 2 == 1 else x
-            if x_coord == 0 and y == 0:
+            #x_coord = size_x - 1 - x if y % 2 == 1 else x
+            if x == 0 and y == 0:
                 room = rooms[1] 
             elif num % 10 == 0:
                 room = rooms[2]
             else:
                 room = rooms[1]
-            room = Room(room_count, room['name'], room['description'], x_coord, y)
-            self.grid[y][x_coord] = room
+            room = Room(room_count, room['name'], room['description'], x, y)
+            self.grid[y][x] = room
             room_count += 1
 
         #Making east + west connection between adjacent rooms
@@ -80,18 +80,23 @@ class World:
             x = room_count % size_x
             y = room_count // size_x
             if x < size_x - 1:
-                if y % 2 == 1:
-                    curr_room =  self.grid[y][size_x - 1 - x]
-                    next_room = self.grid[y][size_x - 1 - x - 1]
-                    if next_room is not None:
-                        if curr_room.name != 'Empty' and next_room.name != 'Empty':
-                            curr_room.connect_rooms(next_room, 'w') 
-                else: 
-                    curr_room = self.grid[y][x]
-                    next_room = self.grid[y][x + 1]
-                    if next_room is not None: 
-                        if curr_room.name != 'Empty' and next_room.name != 'Empty':
-                            curr_room.connect_rooms(next_room, 'e') 
+                curr_room = self.grid[y][x]
+                next_room = self.grid[y][x + 1]
+                if next_room is not None: 
+                    if curr_room.name != 'Empty' and next_room.name != 'Empty':
+                        curr_room.connect_rooms(next_room, 'e') 
+                # if y % 2 == 1:
+                #     curr_room =  self.grid[y][size_x - 1 - x]
+                #     next_room = self.grid[y][size_x - 1 - x - 1]
+                #     if next_room is not None:
+                #         if curr_room.name != 'Empty' and next_room.name != 'Empty':
+                #             curr_room.connect_rooms(next_room, 'w') 
+                # else: 
+                #     curr_room = self.grid[y][x]
+                #     next_room = self.grid[y][x + 1]
+                #     if next_room is not None: 
+                #         if curr_room.name != 'Empty' and next_room.name != 'Empty':
+                #             curr_room.connect_rooms(next_room, 'e') 
             room_count += 1
 
         #Making north + south connection between adjacent rooms
@@ -158,7 +163,8 @@ class World:
                 else:
                     str += " "
                 if room is not None:
-                    str += f"{room.name}"[-3:]
+                    #str += f"{room.name}"[-3:]
+                    str += f"{room.id}".zfill(3)
                 else:
                     str += "   "
                 if room is not None and room.e_to is not None:
