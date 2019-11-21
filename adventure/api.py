@@ -90,4 +90,28 @@ def say(request):
 @api_view(["GET"])
 def get_map(request):
     rooms = Room.objects.all().values().order_by('id')
-    return JsonResponse({"rooms": list(rooms)})
+    items = Item.objects.all().values().order_by('id')
+    return JsonResponse({"rooms": list(rooms), 'items': list(items)})
+
+@api_view(["POST"])
+def grab_item(request):
+    player = request.user.player
+    data = json.loads(request.body)
+    item_id = data['item']
+    item = Item.objects.all().filter(id=item_id).values()
+    item.player_set.add(player)
+    player.items.add(item)
+    items = player.items.all().values()
+    return JsonResponse({'items': items})
+
+
+@api_view(["POST"])
+def drop_item(request):
+    player = request.user.player
+    data = json.loads(request.body)
+    item_id = data['item']
+    item = Item.objects.all().filter(id=item_id).values()
+    item.player_set.remove(player)
+    player.items.remove(item)
+    items = player.items.all().values()
+    return JsonResponse({'items': items})

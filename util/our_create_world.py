@@ -118,6 +118,7 @@ class World:
                     conn += 1
                 if conn == 1:
                     room = rooms[num % 5 + 18]
+                    room.item = random.randrange(1,4)
                 elif conn == 2:
                     if ((curr_room.n_to is not None and curr_room.s_to is not None) or (curr_room.w_to is not None and curr_room.e_to is not None)):
                         room = rooms[3]
