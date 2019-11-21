@@ -1,4 +1,4 @@
-from adventure.models import Player, Room
+from adventure.models import Player, Room, Item
 import random
 
 Room.objects.all().delete()
@@ -118,7 +118,6 @@ class World:
                 if curr_room.e_to:
                     conn += 1
                 if conn == 1:
-                    print('here')
                     room = rooms[num % 5 + 18]
                     addItem = True
                 elif conn == 2:
@@ -134,7 +133,8 @@ class World:
                 curr_room.title = room['name']
                 curr_room.description = room['description']
                 if addItem:
-                    curr_room.item.id = random.randrange(2, 5)
+                    item_id = random.randrange(2,5)
+                    curr_room.item = Item.objects.filter(id = item_id)[0]
                 curr_room.save()
             room_count += 1
 
