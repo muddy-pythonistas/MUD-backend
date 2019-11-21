@@ -109,15 +109,16 @@ class World:
             addItem = False
             if not (x == 0 and y == 0) and curr_room.title != 'Empty':
                 conn = 0
-                if curr_room.n_to is not None:
+                if curr_room.n_to:
                     conn += 1
-                if curr_room.w_to is not None:
+                if curr_room.w_to:
                     conn += 1 
-                if curr_room.s_to is not None:
+                if curr_room.s_to:
                     conn += 1
-                if curr_room.e_to is not None:
+                if curr_room.e_to:
                     conn += 1
                 if conn == 1:
+                    print('here')
                     room = rooms[num % 5 + 18]
                     addItem = True
                 elif conn == 2:
