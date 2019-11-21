@@ -63,17 +63,15 @@ class World:
             x = room_count % size_x
             y = room_count // size_x
             num = random.randrange(101)    
-            x_coord = size_x - 1 - x if y % 2 == 1 else x
-
-            if (x_coord == 0 and y == 0) or num % 4 == 0:
+            #x_coord = size_x - 1 - x if y % 2 == 1 else x
+            if x == 0 and y == 0:
                 room = rooms[1] 
             elif num % 10 == 0:
                 room = rooms[2]
             else:
-                room = rooms[num // 5 + 2]
-
-            room = Room(room_count, room['name'], room['description'], x_coord, y)
-            self.grid[y][x_coord] = room
+                room = rooms[1]
+            room = Room(room_count, room['name'], room['description'], x, y)
+            self.grid[y][x] = room
             room_count += 1
 
         #Making east + west connection between adjacent rooms
@@ -82,18 +80,23 @@ class World:
             x = room_count % size_x
             y = room_count // size_x
             if x < size_x - 1:
-                if y % 2 == 1:
-                    curr_room =  self.grid[y][size_x - 1 - x]
-                    next_room = self.grid[y][size_x - 1 - x - 1]
-                    if next_room is not None:
-                        if curr_room.name != 'Empty' and next_room.name != 'Empty':
-                            curr_room.connect_rooms(next_room, 'w') 
-                else: 
-                    curr_room = self.grid[y][x]
-                    next_room = self.grid[y][x + 1]
-                    if next_room is not None: 
-                        if curr_room.name != 'Empty' and next_room.name != 'Empty':
-                            curr_room.connect_rooms(next_room, 'e') 
+                curr_room = self.grid[y][x]
+                next_room = self.grid[y][x + 1]
+                if next_room is not None: 
+                    if curr_room.name != 'Empty' and next_room.name != 'Empty':
+                        curr_room.connect_rooms(next_room, 'e') 
+                # if y % 2 == 1:
+                #     curr_room =  self.grid[y][size_x - 1 - x]
+                #     next_room = self.grid[y][size_x - 1 - x - 1]
+                #     if next_room is not None:
+                #         if curr_room.name != 'Empty' and next_room.name != 'Empty':
+                #             curr_room.connect_rooms(next_room, 'w') 
+                # else: 
+                #     curr_room = self.grid[y][x]
+                #     next_room = self.grid[y][x + 1]
+                #     if next_room is not None: 
+                #         if curr_room.name != 'Empty' and next_room.name != 'Empty':
+                #             curr_room.connect_rooms(next_room, 'e') 
             room_count += 1
 
         #Making north + south connection between adjacent rooms
@@ -108,23 +111,44 @@ class World:
                     if curr_room.name != 'Empty' and next_room.name != 'Empty':
                         curr_room.connect_rooms(next_room, 's') 
             room_count += 1
+        
+        #Update rooms based on connections
+        room_count = 0
+        while room_count < num_rooms:
+            x = room_count % size_x
+            y = room_count // size_x
+            curr_room = self.grid[y][x]
+            num = random.randrange(625) 
+            if not (x == 0 and y == 0) and curr_room.name != 'Empty':
+                conn = 0
+                if curr_room.n_to is not None:
+                    conn += 1
+                if curr_room.w_to is not None:
+                    conn += 1
+                if curr_room.e_to is not None:
+                    conn += 1
+                if curr_room.s_to is not None:
+                    conn += 1
+                if conn == 1:
+                    room = rooms[num % 5 + 18]
+                elif conn == 2:
+                    if ((curr_room.n_to is not None and curr_room.s_to is not None) or (curr_room.w_to is not None and curr_room.e_to is not None)): 
+                        room = rooms[3]
+                    else:
+                        room = rooms[num % 9 + 10]
+                else:
+                    if num % 2 == 0:
+                        room = rooms[1]
+                    else:
+                        room = rooms[num % 18 + 4]
+                curr_room.name = room['name']
+                curr_room.description = room['description']
+            room_count += 1
 
     def print_rooms(self):
-        '''
-        Print the rooms in room_grid in ascii characters.
-        '''
-
-        # Add top border
         str = "# " * ((3 + self.width * 5) // 2) + "\n"
-
-        # The console prints top to bottom but our array is arranged
-        # bottom to top.
-        #
-        # We reverse it so it draws in the right direction.
-        reverse_grid = list(self.grid) # make a copy of the list
-        #reverse_grid.reverse()
+        reverse_grid = list(self.grid) 
         for row in reverse_grid:
-            # PRINT NORTH CONNECTION ROW
             str += "#"
             for room in row:
                 if room is not None and room.n_to is not None:
@@ -132,7 +156,6 @@ class World:
                 else:
                     str += "     "
             str += "#\n"
-            # PRINT ROOM ROW
             str += "#"
             for room in row:
                 if room is not None and room.w_to is not None:
@@ -140,6 +163,7 @@ class World:
                 else:
                     str += " "
                 if room is not None:
+                    #str += f"{room.name}"[-3:]
                     str += f"{room.id}".zfill(3)
                 else:
                     str += "   "
@@ -148,7 +172,6 @@ class World:
                 else:
                     str += " "
             str += "#\n"
-            # PRINT SOUTH CONNECTION ROW
             str += "#"
             for room in row:
                 if room is not None and room.s_to is not None:
@@ -156,21 +179,13 @@ class World:
                 else:
                     str += "     "
             str += "#\n"
-
-        # Add bottom border
         str += "# " * ((3 + self.width * 5) // 2) + "\n"
-
-        # Print string
         print(str)
 
-
-
 w = World()
-num_rooms = 100
-width = 10
-height = 10
+num_rooms = 625
+width = 25
+height = 25
 w.generate_rooms(width, height, num_rooms)
 w.print_rooms()
-
-
 print(f"\n\nWorld\n  height: {height}\n  width: {width},\n  num_rooms: {num_rooms}\n")
