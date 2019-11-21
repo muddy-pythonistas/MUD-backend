@@ -70,7 +70,7 @@ class World:
             num = random.randrange(101)    
             if x == 0 and y == 0:
                 room = rooms[1] 
-            elif num % 10 == 0:
+            elif num % 10 == 0 or num % 9 == 0:
                 room = rooms[2]
             else:
                 room = rooms[1]
@@ -106,6 +106,7 @@ class World:
             y = room_count // size_y
             curr_room = self.grid[y][x]
             num = random.randrange(625)
+            addItem = False
             if not (x == 0 and y == 0) and curr_room.title != 'Empty':
                 conn = 0
                 if curr_room.n_to is not None:
@@ -118,7 +119,7 @@ class World:
                     conn += 1
                 if conn == 1:
                     room = rooms[num % 5 + 18]
-                    room.item = random.randrange(1,4)
+                    addItem = True
                 elif conn == 2:
                     if ((curr_room.n_to is not None and curr_room.s_to is not None) or (curr_room.w_to is not None and curr_room.e_to is not None)):
                         room = rooms[3]
@@ -131,6 +132,8 @@ class World:
                         room = rooms[num % 18 + 4]
                 curr_room.title = room['name']
                 curr_room.description = room['description']
+                if addItem:
+                    curr_room.item.id = random.randrange(2, 5)
                 curr_room.save()
             room_count += 1
 
@@ -180,4 +183,6 @@ w.print_rooms()
 players=Player.objects.all()
 for p in players:
     p.currentRoom=w.grid[0][0].id
+    p.x_coord = 0
+    p.y_coord = 0
     p.save()
