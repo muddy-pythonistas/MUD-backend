@@ -106,6 +106,8 @@ def grab_item(request):
     item.player_set.add(player)
     player.items.add(item)
     items = player.items.all().values()
+    item.save()
+    player.save()
     return JsonResponse({'items': items})
 
 
@@ -118,6 +120,8 @@ def drop_item(request):
     item.player_set.remove(player)
     player.items.remove(item)
     items = player.items.all().values()
+    item.save()
+    player.save()
     return JsonResponse({'items': items})
 
 @api_view(["POST"])
@@ -126,5 +130,6 @@ def change_char(request):
     data = json.loads(request.body)
     player.sprite = data['sprite']
     player.char_class = data['char_class']
+    player.save()
     return JsonResponse({"sprite": player.sprite, "char_class":
         player.char_class})
