@@ -118,3 +118,12 @@ def drop_item(request):
     player.items.remove(item)
     items = player.items.all().values()
     return JsonResponse({'items': items})
+
+@api_view(["POST"])
+def change_char(request):
+    player = request.user.player
+    data = json.loads(request.body)
+    player.sprite = data['sprite']
+    player.char_class = data['char_class']
+    return JsonResponse({"sprite": player.sprite, "char_class":
+        player.char_class})

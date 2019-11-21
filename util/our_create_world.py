@@ -106,7 +106,11 @@ class World:
             y = room_count // size_y
             curr_room = self.grid[y][x]
             num = random.randrange(625)
-            addItem = False
+            add_item = False
+            use_sword = True
+            use_shield = True
+            use_key = True
+            use_door = True
             if not (x == 0 and y == 0) and curr_room.title != 'Empty':
                 conn = 0
                 if curr_room.n_to:
@@ -133,8 +137,20 @@ class World:
                 curr_room.title = room['name']
                 curr_room.description = room['description']
                 if addItem:
-                    item_id = random.randrange(2,5)
-                    curr_room.item = Item.objects.filter(id = item_id)[0]
+                    if use_shield:
+                        curr_room.item = Item.objects.filter(id = 4)[0]
+                        use_shield = False
+                    elif use_sword:
+                        curr_room.item = Item.objects.filter(id=3)[0]
+                        use_sword = False
+                    elif use_key:
+                        curr_room.item = Item.objects.filter(id=5)[0]
+                        use_key = False
+                    elif use_door:
+                        curr_room.item = Item.objects.filter(id=6)[0]
+                        use_door = False
+                    else:
+                        curr_room.item = Item.objects.filter(id=2)[0]
                 curr_room.save()
             room_count += 1
 

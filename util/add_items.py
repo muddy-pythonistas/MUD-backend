@@ -9,7 +9,8 @@ items = {
              "enemies and turn them into a sieve.",
     "Shield": "A lightweight shield that is easy to maneuver but strong " \
               "enough to defend off most attacks.",
-    "Key": "A rickety key with a unique design. What could it be used for?"
+    "Key": "A gleaming key with a unique design. What could it be used for?",
+    "Door": "A solid oak door. You see sunlight filtering through the cracks. Unfortunately, it is locked..."
 }
 
 count = 1

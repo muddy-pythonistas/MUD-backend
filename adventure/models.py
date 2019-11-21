@@ -41,6 +41,8 @@ class Player(models.Model):
     y_coord = models.IntegerField(default=0)
     uuid = models.UUIDField(default=uuid.uuid4, unique=True)
     items = models.ManyToManyField(Item)
+    sprite = models.CharField(max_length=50, default="boy")
+    char_class = models.CharField(max_length=50, default="warrior")
 
     def initialize(self):
         if self.currentRoom == 0:
