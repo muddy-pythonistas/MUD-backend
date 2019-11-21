@@ -12,6 +12,9 @@ items = {
     "Key": "A rickety key with a unique design. What could it be used for?"
 }
 
+count = 1
 for item in items.items():
     i = Item(name=item[0], description = item[1])
+    i.id = count
+    count += 1
     i.save()
