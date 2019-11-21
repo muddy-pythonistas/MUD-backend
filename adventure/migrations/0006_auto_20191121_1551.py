@@ -14,6 +14,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='room',
             name='item',
-            field=models.ForeignKey(default=0, on_delete=django.db.models.deletion.CASCADE, to='adventure.Item'),
+            field=models.ForeignKey(default=1,
+                                    on_delete=django.db.models.deletion.CASCADE, to='adventure.Item'),
         ),
     ]
