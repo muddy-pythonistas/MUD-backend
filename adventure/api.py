@@ -24,7 +24,7 @@ def initialize(request):
     player_id = player.id
     uuid = player.uuid
     room = player.room()
-    items = player.items.all().values()
+    items = player.items.all()[0]
     players = room.playerNames(player_id)
     return JsonResponse({'uuid': uuid, 'items': items,
                          'name':player.user.username, \
