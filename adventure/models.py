@@ -46,6 +46,12 @@ class Player(models.Model):
             self.initialize()
             return self.room()
 
+class Item(models.Model):
+    name = models.CharField(max_length=50, default="Item")
+    description = models.CharField(max_length=500, default="Default Item")
+    rooms = models.ManyToManyField(Room)
+    players = models.ManyToManyField(Player)
+
 @receiver(post_save, sender=User)
 def create_user_player(sender, instance, created, **kwargs):
     if created:
