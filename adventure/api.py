@@ -97,6 +97,15 @@ def get_map(request):
     items = Item.objects.all().values().order_by('id')
     return JsonResponse({"rooms": list(rooms), 'items': list(items)})
 
+@api_view(["GET"])
+def get_occupied_rooms(request):
+    player = request.user.player
+    others = Player.objects.exclude(id = player.id )
+    rooms = []
+    for person in others:
+        rooms.append(person.currentRoom)
+    return JsonResponse({'occupied_rooms': set(rooms)})
+
 @api_view(["POST"])
 def grab_item(request):
     player = request.user.player
