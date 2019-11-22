@@ -104,7 +104,7 @@ def get_occupied_rooms(request):
     rooms = []
     for person in others:
         rooms.append(person.currentRoom)
-    return JsonResponse({'occupied_rooms': set(rooms)})
+    return JsonResponse({'occupied_rooms': list(set(rooms))})
 
 @api_view(["POST"])
 def grab_item(request):
