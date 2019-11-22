@@ -108,7 +108,7 @@ def grab_item(request):
     items = player.items.all().values()
     item.save()
     player.save()
-    return JsonResponse({'items': items})
+    return JsonResponse({'items': list(items)})
 
 
 @api_view(["POST"])
@@ -122,7 +122,7 @@ def drop_item(request):
     items = player.items.all().values()
     item.save()
     player.save()
-    return JsonResponse({'items': items})
+    return JsonResponse({'items': list(items)})
 
 @api_view(["POST"])
 def change_char(request):
