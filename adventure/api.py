@@ -102,7 +102,7 @@ def grab_item(request):
     player = request.user.player
     data = json.loads(request.body)
     item_id = data['item']
-    item = Item.objects.all().filter(id=item_id).values()
+    item = Item.objects.filter(id=item_id)[0]
     item.player_set.add(player)
     player.items.add(item)
     items = player.items.all().values()
@@ -116,7 +116,7 @@ def drop_item(request):
     player = request.user.player
     data = json.loads(request.body)
     item_id = data['item']
-    item = Item.objects.all().filter(id=item_id).values()
+    item = Item.objects.filter(id=item_id)[0]
     item.player_set.remove(player)
     player.items.remove(item)
     items = player.items.all().values()
