@@ -121,8 +121,10 @@ def drop_item(request):
     player.items.remove(item)
     items = player.items.all().values()
     item.save()
+    if item_id == 2:
+        player.gold_count += 1
     player.save()
-    return JsonResponse({'items': list(items)})
+    return JsonResponse({'items': list(items), 'gold': player.gold_count})
 
 @api_view(["POST"])
 def change_char(request):
